@@ -1,0 +1,209 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.yeqi.answersys.choiceques.dao.ChoiceQuestionMapper">
+  <resultMap id="BaseResultMap" type="com.yeqi.answersys.choiceques.entity.ChoiceQuestion">
+    <id column="id" jdbcType="INTEGER" property="id" />
+    <result column="score" jdbcType="INTEGER" property="score" />
+    <result column="right_choice" jdbcType="VARCHAR" property="right_choice" />
+    <result column="question" jdbcType="LONGVARCHAR" property="question" />
+    <result column="choice_a" jdbcType="LONGVARCHAR" property="choice_a" />
+    <result column="choice_b" jdbcType="LONGVARCHAR" property="choice_b" />
+    <result column="choice_c" jdbcType="LONGVARCHAR" property="choice_c" />
+    <result column="choice_d" jdbcType="LONGVARCHAR" property="choice_d" />
+  </resultMap>
+  <resultMap extends="BaseResultMap" id="ResultMapWithBLOBs" type="com.yeqi.answersys.choiceques.entity.ChoiceQuestionWithBLOBs">
+    <result column="question" jdbcType="LONGVARCHAR" property="question" />
+    <result column="choice_a" jdbcType="LONGVARCHAR" property="choice_a" />
+    <result column="choice_b" jdbcType="LONGVARCHAR" property="choice_b" />
+    <result column="choice_c" jdbcType="LONGVARCHAR" property="choice_c" />
+    <result column="choice_d" jdbcType="LONGVARCHAR" property="choice_d" />
+  </resultMap>
+  <sql id="Example_Where_Clause">
+    <where>
+      <foreach collection="oredCriteria" item="criteria" separator="or">
+        <if test="criteria.valid">
+          <trim prefix="(" prefixOverrides="and" suffix=")">
+            <foreach collection="criteria.criteria" item="criterion">
+              <choose>
+                <when test="criterion.noValue">
+                  and ${criterion.condition}
+                </when>
+                <when test="criterion.singleValue">
+                  and ${criterion.condition} #{criterion.value}
+                </when>
+                <when test="criterion.betweenValue">
+                  and ${criterion.condition} #{criterion.value} and #{criterion.secondValue}
+                </when>
+                <when test="criterion.listValue">
+                  and ${criterion.condition}
+                  <foreach close=")" collection="criterion.value" item="listItem" open="(" separator=",">
+                    #{listItem}
+                  </foreach>
+                </when>
+              </choose>
+            </foreach>
+          </trim>
+        </if>
+      </foreach>
+    </where>
+  </sql>
+  <sql id="Base_Column_List">
+    id, score, right_choice
+  </sql>
+  <sql id="Blob_Column_List">
+    question, choice_a, choice_b, choice_c, choice_d
+  </sql>
+  <select id="selectByExampleWithBLOBs" parameterType="com.yeqi.answersys.choiceques.entity.ChoiceQuestionExample" resultMap="ResultMapWithBLOBs">
+    select
+    <if test="distinct">
+      distinct
+    </if>
+    'false' as QUERYID,
+    <include refid="Base_Column_List" />
+    ,
+    <include refid="Blob_Column_List" />
+    from choice_question
+    <if test="_parameter != null">
+      <include refid="Example_Where_Clause" />
+    </if>
+    <if test="orderByClause != null">
+      order by ${orderByClause}
+    </if>
+  </select>
+  <select id="selectByExample" parameterType="com.yeqi.answersys.choiceques.entity.ChoiceQuestionExample" resultMap="BaseResultMap">
+    select
+    <if test="distinct">
+      distinct
+    </if>
+    'false' as QUERYID,
+    <include refid="Base_Column_List" />
+    from choice_question
+    <if test="_parameter != null">
+      <include refid="Example_Where_Clause" />
+    </if>
+    <if test="orderByClause != null">
+      order by ${orderByClause}
+    </if>
+  </select>
+  <select id="selectByPrimaryKey" parameterType="java.lang.Integer" resultMap="ResultMapWithBLOBs">
+    select 
+    <include refid="Base_Column_List" />
+    ,
+    <include refid="Blob_Column_List" />
+    from choice_question
+    where id = #{id,jdbcType=INTEGER}
+  </select>
+  <select id="selectRandByPrimaryKey" parameterType="java.lang.Integer" resultMap="BaseResultMap">
+    select
+    <include refid="Base_Column_List" />
+    ,
+    <include refid="Blob_Column_List" />
+    from choice_question
+    ORDER BY RAND() LIMIT 4
+  </select>
+  <delete id="deleteByPrimaryKey" parameterType="java.lang.Integer">
+    delete from choice_question
+    where id = #{id,jdbcType=INTEGER}
+  </delete>
+  <insert id="insert" keyColumn="id" keyProperty="id" parameterType="com.yeqi.answersys.choiceques.entity.ChoiceQuestionWithBLOBs" useGeneratedKeys="true">
+    insert into choice_question (score, right_choice, question, 
+      choice_a, choice_b, choice_c, 
+      choice_d)
+    values (#{score,jdbcType=INTEGER}, #{right_choice,jdbcType=VARCHAR}, #{question,jdbcType=LONGVARCHAR}, 
+      #{choice_a,jdbcType=LONGVARCHAR}, #{choice_b,jdbcType=LONGVARCHAR}, #{choice_c,jdbcType=LONGVARCHAR}, 
+      #{choice_d,jdbcType=LONGVARCHAR})
+  </insert>
+  <insert id="insertSelective" keyColumn="id" keyProperty="id" parameterType="com.yeqi.answersys.choiceques.entity.ChoiceQuestionWithBLOBs" useGeneratedKeys="true">
+    insert into choice_question
+    <trim prefix="(" suffix=")" suffixOverrides=",">
+      <if test="score != null">
+        score,
+      </if>
+      <if test="right_choice != null">
+        right_choice,
+      </if>
+      <if test="question != null">
+        question,
+      </if>
+      <if test="choice_a != null">
+        choice_a,
+      </if>
+      <if test="choice_b != null">
+        choice_b,
+      </if>
+      <if test="choice_c != null">
+        choice_c,
+      </if>
+      <if test="choice_d != null">
+        choice_d,
+      </if>
+    </trim>
+    <trim prefix="values (" suffix=")" suffixOverrides=",">
+      <if test="score != null">
+        #{score,jdbcType=INTEGER},
+      </if>
+      <if test="right_choice != null">
+        #{right_choice,jdbcType=VARCHAR},
+      </if>
+      <if test="question != null">
+        #{question,jdbcType=LONGVARCHAR},
+      </if>
+      <if test="choice_a != null">
+        #{choice_a,jdbcType=LONGVARCHAR},
+      </if>
+      <if test="choice_b != null">
+        #{choice_b,jdbcType=LONGVARCHAR},
+      </if>
+      <if test="choice_c != null">
+        #{choice_c,jdbcType=LONGVARCHAR},
+      </if>
+      <if test="choice_d != null">
+        #{choice_d,jdbcType=LONGVARCHAR},
+      </if>
+    </trim>
+  </insert>
+  <update id="updateByPrimaryKeySelective" parameterType="com.yeqi.answersys.choiceques.entity.ChoiceQuestionWithBLOBs">
+    update choice_question
+    <set>
+      <if test="score != null">
+        score = #{score,jdbcType=INTEGER},
+      </if>
+      <if test="right_choice != null">
+        right_choice = #{right_choice,jdbcType=VARCHAR},
+      </if>
+      <if test="question != null">
+        question = #{question,jdbcType=LONGVARCHAR},
+      </if>
+      <if test="choice_a != null">
+        choice_a = #{choice_a,jdbcType=LONGVARCHAR},
+      </if>
+      <if test="choice_b != null">
+        choice_b = #{choice_b,jdbcType=LONGVARCHAR},
+      </if>
+      <if test="choice_c != null">
+        choice_c = #{choice_c,jdbcType=LONGVARCHAR},
+      </if>
+      <if test="choice_d != null">
+        choice_d = #{choice_d,jdbcType=LONGVARCHAR},
+      </if>
+    </set>
+    where id = #{id,jdbcType=INTEGER}
+  </update>
+  <update id="updateByPrimaryKeyWithBLOBs" parameterType="com.yeqi.answersys.choiceques.entity.ChoiceQuestionWithBLOBs">
+    update choice_question
+    set score = #{score,jdbcType=INTEGER},
+      right_choice = #{right_choice,jdbcType=VARCHAR},
+      question = #{question,jdbcType=LONGVARCHAR},
+      choice_a = #{choice_a,jdbcType=LONGVARCHAR},
+      choice_b = #{choice_b,jdbcType=LONGVARCHAR},
+      choice_c = #{choice_c,jdbcType=LONGVARCHAR},
+      choice_d = #{choice_d,jdbcType=LONGVARCHAR}
+    where id = #{id,jdbcType=INTEGER}
+  </update>
+  <update id="updateByPrimaryKey" parameterType="com.yeqi.answersys.choiceques.entity.ChoiceQuestion">
+    update choice_question
+    set score = #{score,jdbcType=INTEGER},
+      right_choice = #{right_choice,jdbcType=VARCHAR}
+    where id = #{id,jdbcType=INTEGER}
+  </update>
+</mapper>
